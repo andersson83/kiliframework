@@ -76,7 +76,7 @@ class Kili_Dynamic_Styles {
 		$page_option_field = function_exists( 'get_fields' ) ? get_fields( 'option' ) : [];
 		for ( $i = 0; $i < $size; $i++ ) {
 			$field = $fields[ $i ];
-			$page_extra_field = array_filter( $field, function( $key ) { return $key != 'kili_block_builder'; }, ARRAY_FILTER_USE_KEY );
+			$page_extra_field = array_filter( $field ? $field : [], function( $key ) { return $key != 'kili_block_builder'; }, ARRAY_FILTER_USE_KEY );
 			if ( isset( $field['kili_block_builder'] ) && is_array( $field['kili_block_builder'] ) ) {
 				foreach ( $field['kili_block_builder'] as $page_key => $page_field ) {
 					$style .= $this->replace_placeholders( $page_field, $page_extra_field, $page_option_field, $field['page_id'], ( isset( $page_field['acf_fc_layout'] ) ? $page_field['acf_fc_layout'] : '' ), $page_key );
@@ -143,7 +143,7 @@ class Kili_Dynamic_Styles {
 			$replacements['{{acf_fc_layout}}'] = $layout;
 			$replacements = array_merge( $replacements, $this->get_array_replacement( $field ) );
 			$replacements = array_merge( $replacements, $this->get_array_replacement( $extra_field ) );
-			$replacements = array_merge( $replacements, $this->get_array_replacement( $page_option_field ) );
+			$replacements = array_merge( $replacements, $this->get_array_replacement( $page_option_field ? $page_option_field : [] ) );
 
 			foreach ( $replacements as $placeholder => $replacement ) {
 				$styles = str_replace( $placeholder, $replacement, $styles );
